@@ -7,7 +7,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      option: "temperature0"
+      option: "temperature0",
+      scale: "scale"
     };
     ServerHandler(this);
   }
@@ -51,9 +52,10 @@ class App extends Component {
   }
   componentWillUpdate(nextProps, nextState) {
     var ctx = document.getElementById("myChart").getContext("2d");
-    var current = this.state.option;
-    console.log("current sensor:" + current);
-    var sensorVals = nextState[current];
+    var currentSensor = this.state.option;
+    var scale = this.state.scale;
+    // console.log("current sensor:" + currentSensor);
+    var sensorVals = nextState[currentSensor];
     // var recentVals = sensorVals['recent'];
     // for(var key in sensorVals){
     //   console.log('sensorVals property'+key);
@@ -71,17 +73,17 @@ class App extends Component {
       // xaxis.map((val))
       data: {
         labels:
-          sensorVals["recent"] !== undefined
-            ? sensorVals["recent"].map(val => val.key)
+          sensorVals[scale] !== undefined
+            ? sensorVals[scale].map(val => val.key)
             : [],
         datasets: [
           {
-            label: current,
+            label: currentSensor,
             backgroundColor: "rgb(255,255, 255)",
-            borderColor:  "green",
+            borderColor: "green",
             data:
-              sensorVals["recent"] !== undefined
-                ? sensorVals["recent"].map(val => val.val)
+              sensorVals[scale] !== undefined
+                ? sensorVals[scale].map(val => val.val)
                 : []
           }
         ]
@@ -89,6 +91,7 @@ class App extends Component {
 
       // Configuration options go here
       options: {
+        // showLines:false,
         animation: {
           duration: 0
         }
@@ -98,6 +101,11 @@ class App extends Component {
   onOptionChange(e) {
     console.log("option change to " + e.target.value);
     this.setState({ option: e.target.value });
+  }
+  onScaleChange(e) {
+    this.setState({
+      scale: e.target.value
+    });
   }
   render() {
     var options = [];
@@ -110,6 +118,7 @@ class App extends Component {
         );
     }
     // var options = this.state.map();
+
     return (
       <div>
         <div style={{ width: "550px", height: "300px" }}>
@@ -122,6 +131,22 @@ class App extends Component {
           >
             {options}
           </select>
+          <div>
+            <form>
+              <input
+                type="radio"
+                value="recent"
+                checked={this.state.scale === "recent"}
+                onChange={this.onScaleChange.bind(this)}
+              />recent
+              <input
+                type="radio"
+                value="minute"
+                checked={this.state.scale === "minute"}
+                onChange={this.onScaleChange.bind(this)}
+              />minute
+            </form>
+          </div>
         </div>
       </div>
     );

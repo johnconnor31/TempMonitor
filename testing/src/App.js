@@ -11,6 +11,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      freeze:false,
       selected: ["temperature0"],
       scale: "recent",
       colorSet: [
@@ -29,6 +30,7 @@ class App extends Component {
     ServerHandler(this);
     this.emptyChart();
   }
+
   emptyChart(){
       Chart.plugins.register({
   afterDraw: function(chart) {
@@ -48,6 +50,10 @@ class App extends Component {
     }
   }
 });
+  }
+  shouldComponentUpdate(){
+    console.log('componet should freeze'+this.state.freeze);
+    return !this.state.freeze;
   }
   componentDidMount() {
     // console.log(this.state);
@@ -122,6 +128,8 @@ class App extends Component {
           animation: {
             duration: 0
           },
+          // events:['click'],
+          onHover:(e,o)=>e.type!=='mouseout'?this.setState({freeze:true}):this.setState({freeze:false})
         }
     });
     // console.log('chart'+Object.keys(chart));

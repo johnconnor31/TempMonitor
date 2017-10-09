@@ -2,20 +2,26 @@
 
 # How To Guide:
 
-#Prerequisites:
+  # Prerequisites:
 
-nodejs,npm,reactjs
+    nodejs,npm,reactjs
 
-Clone the repository
+  # Installation:
 
-cd to Tool
+    Clone the repository
 
-run npm init
+    cd to Tool
 
-run npm start
+    run npm init
 
-It opens in  a new browser tab.
+    run npm start
 
-#Toggle minute,recent to toggle the time scale
+    It opens in  a new browser tab.
 
-#You can select multiple sensors to compare against each other.
+  # Features:
+
+    #Toggle minute,recent to toggle the time scale
+
+    #You can select multiple sensors to compare against each other.
+
+    #Click on a data point to see the attributes of it.

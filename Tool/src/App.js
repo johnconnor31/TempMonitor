@@ -98,7 +98,7 @@ class App extends Component {
             data: sensorVals[multiId++][scale].map(val => val.val)
           };
         })
-      : this.emptyChart('No data to display');
+      : this.emptyChart('Please select a sensor to view the data');
     var labels = sensorVals[0] ? sensorVals[0][scale].map(val => val.key) : [];
     // console.log('lables'+labels);
     // var recentVals = sensorVals['recent'];

@@ -2,9 +2,9 @@
 
 # How To Guide:
 
-  # Prerequisites:
+  # Libraries used:
 
-    nodejs,npm,reactjs
+    nodejs,npm,reactjs,Chartjs
 
   # Installation:
 

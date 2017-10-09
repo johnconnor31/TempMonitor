@@ -1,7 +1,10 @@
 # TempMonitor
 
-How To Guide:
-Prerequisites: nodejs,npm,reactjs
+# How To Guide:
+
+#Prerequisites:
+
+nodejs,npm,reactjs
 
 Clone the repository
 

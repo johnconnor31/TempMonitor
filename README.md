@@ -12,7 +12,7 @@
 
     cd to Tool
 
-    run npm init
+    run npm install
 
     run npm start
 

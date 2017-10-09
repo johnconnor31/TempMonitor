@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import $ from "jquery";
 import Chart from "chart.js";
-import logo from "./logo.svg";
 import "./App.css";
 import ServerHandler from "./ServerHandler";
 import SelectField from "material-ui/SelectField";
@@ -60,7 +58,7 @@ class App extends Component {
     //initial message
     this.emptyChart('Loading...Please wait.');
     var ctx = document.getElementById("myChart").getContext("2d");
-    var chart = new Chart(ctx, {
+    new Chart(ctx, {
       type: "line"
     });
   }
@@ -105,7 +103,7 @@ class App extends Component {
     // var minuteVals = sensorVals['minute'];
     // console.log('in main app'+ sensorVals['recent']);
 
-    var chart = new Chart(ctx, {
+    new Chart(ctx, {
       // The type of chart we want to create
       type: "line",
       // The data for our dataset

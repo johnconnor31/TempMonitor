@@ -11,7 +11,6 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      freeze:false,
       selected: ["temperature0"],
       scale: "recent",
       colorSet: [
@@ -28,36 +27,38 @@ class App extends Component {
       ]
     };
     ServerHandler(this);
-    this.emptyChart();
   }
 
-  emptyChart(){
-      Chart.plugins.register({
-  afterDraw: function(chart) {
-    if (chart.data.datasets.length === 0) {
-      // No data is present
-      var ctx = chart.chart.ctx;
-      var width = chart.chart.width;
-      var height = chart.chart.height
-      chart.clear();
-      
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = "16px normal 'Helvetica Nueue'";
-      ctx.fillText('No data to display', width / 2, height / 2);
-      ctx.restore();
-    }
+  emptyChart(msg) {
+    console.log(msg);
+    Chart.plugins.register({
+      afterDraw: function(chart) {
+        if (chart.data.datasets.length === 0) {
+          // No data is present
+          var ctx = chart.chart.ctx;
+          var width = chart.chart.width;
+          var height = chart.chart.height;
+          chart.clear();
+
+          ctx.save();
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.font = "100px normal 'Helvetica Nueue'";
+          ctx.fillText(msg, width / 2, height / 2);
+          ctx.restore();
+        }
+      }
+    });
   }
-});
-  }
-  shouldComponentUpdate(){
-    console.log('componet should freeze'+this.state.freeze);
+  shouldComponentUpdate() {
+    console.log("componet should freeze" + this.state.freeze);
     return !this.state.freeze;
   }
   componentDidMount() {
     // console.log(this.state);
     // this.paintChart(this.state);
+    //initial message
+    this.emptyChart('Loading...Please wait.');
     var ctx = document.getElementById("myChart").getContext("2d");
     var chart = new Chart(ctx, {
       type: "line"
@@ -74,28 +75,30 @@ class App extends Component {
     var multiId = 0;
     // console.log("current sensor:" + currentSensor);
     var sensorVals = currentSensors.map(val => state[val]);
-    // console.log('filtered sensors'+sensorVals);
-    function pointColorSet(a){
+    // console.log('filtered sensors'+sensorVals.length);
+    function pointColorSet(a) {
       // console.log('change color'+a);
       var data = a[scale];
-      var {min,max} = a; 
-      console.log('min'+min,'max'+max);
-      return data.map(val=>(val.val<min)||(val.val>max)?'red':'green');
+      var { min, max } = a;
+      console.log("min" + min, "max" + max);
+      return data.map(
+        val => (val.val < min || val.val > max ? "red" : "green")
+      );
     }
-    var data = sensorVals
+    var data = sensorVals.length!==0
       ? sensorVals.map(sensorData => {
           return {
             label: currentSensors[multiId],
             // backgroundColor: "rgb(255,255, 255)",
             borderColor: this.state.colorSet[multiId],
             pointBackgroundColor: pointColorSet(sensorVals[multiId]),
-            pointStyle : 'rect',
+            pointStyle: "rect",
             radius: 5,
             // borderWidth: "0.8px",
             data: sensorVals[multiId++][scale].map(val => val.val)
-            }
-          })
-      : [];
+          };
+        })
+      : this.emptyChart('No data to display');
     var labels = sensorVals[0] ? sensorVals[0][scale].map(val => val.key) : [];
     // console.log('lables'+labels);
     // var recentVals = sensorVals['recent'];
@@ -111,29 +114,29 @@ class App extends Component {
       // xaxis.map((val))
       data: {
         labels: labels,
-        datasets: data,
+        datasets: data
       },
-        // Configuration options go here
-        options: {
-          title: {
-            display: true,
-            text: 'Real-time Sensor Data',
-            fontsize:'40px'
-          },
-          elements: {
-            line: {
-              tension: 0 // disables bezier curves
-            }
-          },
-          animation: {
-            duration: 0
-          },
-          // events:['click'],
-          onHover:(e,o)=>e.type!=='mouseout'?this.setState({freeze:true}):this.setState({freeze:false})
-        }
+      // Configuration options go here
+      options: {
+        title: {
+          display: true,
+          text:
+            "Real-time Sensor Data(Little Squares marked in red are deviants)",
+          fontsize: "40px"
+        },
+        elements: {
+          line: {
+            tension: 0 // disables bezier curves
+          }
+        },
+        animation: {
+          duration: 0
+        },
+        events: ["click"]
+        // onClick: (e,o)=> this.setState({freeze:true}),
+      }
     });
     // console.log('chart'+Object.keys(chart));
-    
   }
   onOptionChange(e, index, vals) {
     // console.log("option change to " + vals);
@@ -170,12 +173,11 @@ class App extends Component {
 
     return (
       <div>
-          
-      <canvas id="myChart" width='800px' height='300px' />
-        
+        <canvas id="myChart" width="800px" height="300px" />
+
         <div style={{ float: "left" }}>
           <MuiThemeProvider>
-          <SelectField
+            <SelectField
               multiple={true}
               hintText="Select a Sensor"
               value={selected}
